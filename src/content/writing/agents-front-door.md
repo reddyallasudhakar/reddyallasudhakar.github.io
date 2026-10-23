@@ -8,7 +8,7 @@ summary:
   - "Amazon is fighting AI shopping agents in court and with blocks, but the first appeals ruling sided with the customer who sent the agent."
   - "Blocking won't hold: customers, industry standards and the law are all moving toward agents."
   - "Better: a front door. Agents identify themselves, earn tiers of trust, use a real agent checkout, and the customer approves the exact order."
-  - "And build the best agent of its own, starting with weekly essentials, where it can safely buy on the customer's behalf."
+  - "Build the best agent of its own, starting with weekly essentials, and give sellers agents that answer, price and negotiate within their rules."
 ---
 
 ## The fight, in one year
@@ -275,6 +275,78 @@ Which level fits depends on two things: how often people buy the item, and how c
 
 The first metric tests the core bet: that removing friction makes people buy more often. The return rate tells you whether the agent actually understands what people want. For big-ticket items, the measure that matters is conversion: did the assistant help someone go from browsing to buying?
 
+## The other side: agents for sellers
+
+So far this has been about the buyer's agent. But more than half of what's sold on Amazon comes from independent sellers, and they will want agents too. Amazon has already started: in 2024 it launched Seller Assistant, first codenamed Project Amelia, to help sellers with listings, inventory and account problems, with plans for it to take action on their behalf.
+
+When buyers arrive through agents, a seller's job changes in four ways.
+
+**1. Be readable by agents.** An agent doesn't see your banner image or your clever title. It reads the data: exact specs, real stock, a true delivery date, the return policy. A listing that leaves out the battery capacity simply loses to one that includes it. Being complete and accurate becomes the new search ranking, and a seller's agent can keep every listing that way.
+
+**2. Answer buyer agents directly.** *"Does this charger support 65 W? Will it arrive by Friday in Pune?"* A seller's agent can answer every question instantly from the listing and the warehouse, day or night, instead of the buyer's agent guessing or moving on.
+
+**3. Negotiate where it makes sense.** Amazon's prices for one-off purchases should stay fixed; nobody wants to haggle over toothpaste. But some orders are worth a conversation: a household's agent committing to two packs a month for a year, or an office ordering forty chairs. A seller's agent can accept those within rules the seller sets, like a subscription discount that negotiates itself, and never reveal the seller's lowest price.
+
+**4. Run the shop.** Restock before a sell-out, adjust prices within a range, flag listings that agents keep returning to but not buying from, and read return reasons from agent orders, which are an unusually clear signal of where a listing misled someone.
+
+There's one catch that makes this harder for Amazon than for anyone else. Amazon runs the market and also sells in it. If buyer agents and seller agents are going to negotiate inside Amazon, the rules they negotiate under, and the way offers are ranked, have to be visibly neutral between Amazon's own products and everyone else's. A front door only works if every seller trusts it as much as every buyer does.
+
+Negotiation matters far more on second-hand marketplaces, where both sides are people and every price is up for discussion. [I wrote about that separately](/writing/when-both-sides-send-an-agent/).
+
+<div class="mockups">
+
+<figure class="mock">
+  <div class="phone">
+    <div class="ph-status"><span>9:41</span><span class="ph-dots">● ● ●</span></div>
+    <div class="ph-head plain"><div><strong>Requests from buyer agents</strong><small>Handled by your seller assistant</small></div></div>
+    <div class="ph-body">
+      <ul class="agents">
+        <li>
+          <div class="ag-top"><strong>Detergent 2 L, 2 per month</strong><span class="pill ok">Accepted</span></div>
+          <small>12-month commitment · ₹349 each (8% off)</small>
+          <small>Within your subscription rules</small>
+        </li>
+        <li>
+          <div class="ag-top"><strong>Office chair × 40</strong><span class="pill">Countered</span></div>
+          <small>Asked ₹3,100 each · below your floor</small>
+          <small>Agent offered ₹3,250 with free delivery</small>
+          <span class="link">Review before it's final</span>
+        </li>
+        <li class="blocked">
+          <div class="ag-top"><strong>Unverified agent</strong><span class="pill bad">Ignored</span></div>
+          <small>Asked for your lowest price</small>
+        </li>
+      </ul>
+      <p class="note">Your floor prices are never shared with buyers or their agents.</p>
+    </div>
+  </div>
+  <figcaption><strong>Offers that negotiate themselves.</strong> Repeat and bulk orders get handled within the seller's rules; anything outside them waits for the seller.</figcaption>
+</figure>
+
+<figure class="mock">
+  <div class="phone">
+    <div class="ph-status"><span>9:41</span><span class="ph-dots">● ● ●</span></div>
+    <div class="ph-head plain"><div><strong>How agents see this listing</strong><small>65 W USB-C charger</small></div></div>
+    <div class="ph-body">
+      <div class="order">
+        <div class="ag-top"><strong>Agent-ready</strong><span class="pill">7 of 10</span></div>
+        <div class="meter"><span style="width:70%"></span></div>
+        <dl>
+          <div><dt>Specs</dt><dd>Complete</dd></div>
+          <div><dt>Stock</dt><dd>Live</dd></div>
+          <div><dt>Delivery date</dt><dd>By pin code</dd></div>
+        </dl>
+      </div>
+      <p class="warn">Missing: cable length, laptop compatibility list, warranty terms. Buyer agents asked about these 214 times this week.</p>
+      <p class="note">Fill these in and buyer agents can answer their owners without guessing.</p>
+    </div>
+    <div class="ph-actions"><span class="btn-ph primary">Fill in with assistant</span></div>
+  </div>
+  <figcaption><strong>Readable by agents.</strong> Agents choose on data, not banners, so the seller's assistant shows what agents keep asking for and helps fill it in.</figcaption>
+</figure>
+
+</div>
+
 ## It's not just Amazon
 
 Every business with a login is making the same decision this autumn, and the answers already look like the tiers above.
@@ -312,4 +384,5 @@ The companies that get this right will not be the ones with the best agent. They
 - [Amazon's annual ad revenue passes $68B](https://www.marketingdive.com/news/amazon-annual-ad-revenue-passes-68b-boosted-by-full-funnel-strategy/811569/), Marketing Dive
 - [Brands are upset that Buy for Me is featuring their products without permission](https://www.modernretail.co/technology/brands-are-upset-that-buy-for-me-is-featuring-their-products-on-amazon-without-permission/), Modern Retail, January 2026
 - [Amazon CEO expects to find ways to partner with third-party AI shopping agents](https://www.modernretail.co/technology/amazon-ceo-expects-to-find-ways-to-partner-with-third-party-ai-shopping-agents-in-the-future/), Modern Retail
+- [Amazon unveils Project Amelia, an AI assistant for sellers](https://www.maginative.com/article/amazon-unveils-project-amelia-an-ai-assistant-for-sellers/), Maginative, September 2024
 - [Stripe and OpenAI: Instant Checkout and the Agentic Commerce Protocol](https://stripe.com/newsroom/news/stripe-openai-instant-checkout), Stripe
