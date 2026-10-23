@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: process.env.SITE_URL ?? 'https://reddyallasudhakar.github.io',
   base: process.env.BASE_PATH ?? '/',
-  trailingSlash: 'ignore',
+  trailingSlash: 'always',
   markdown: {
     shikiConfig: { themes: { light: 'github-light', dark: 'github-dark' } },
   },

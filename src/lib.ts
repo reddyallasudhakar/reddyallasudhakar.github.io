@@ -1,7 +1,12 @@
 import { getCollection } from 'astro:content';
 
-export const url = (path = '') =>
-  `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+// GitHub Pages serves pages at '/path/', so page links end in a slash; files (rss.xml, favicon.svg) don't.
+export const url = (path = '') => {
+  const clean = path.replace(/^\//, '');
+  const [p, hash] = clean.split('#');
+  const withSlash = p === '' || p.endsWith('/') || /\.[a-z0-9]+$/i.test(p) ? p : `${p}/`;
+  return `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${withSlash}${hash ? `#${hash}` : ''}`;
+};
 
 export const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
