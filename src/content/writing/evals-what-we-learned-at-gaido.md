@@ -4,6 +4,8 @@ description: How evals built from our agents' real mistakes cut review from 40 m
 date: 2026-10-23
 kind: essay
 tags: [evals, agents, product]
+topic: "Building AI products"
+cover: evals
 summary:
   - "Our AI agents wrote insurance-claim reports, and a person read every one: about 40 minutes a case."
   - "We turned every reviewer correction into a check (nine in all) and sent only failing reports to a human. Review fell to about 4 minutes."

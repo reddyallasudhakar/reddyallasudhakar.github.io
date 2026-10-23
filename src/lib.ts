@@ -22,3 +22,7 @@ export async function getProjects() {
 }
 
 export const kindLabel = { essay: 'Essay', 'case-study': 'Case study', guide: 'Guide' } as const;
+
+// Words in the post, ignoring inline HTML (diagrams, mockups), at 230 words a minute.
+export const readingTime = (body = '') =>
+  Math.max(1, Math.round(body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length / 230));

@@ -4,6 +4,8 @@ description: Agents are coming whether Amazon likes it or not. The real question
 date: 2026-10-23
 kind: essay
 tags: [agents, commerce, product]
+topic: "Agentic commerce"
+cover: door
 summary:
   - "Amazon is fighting AI shopping agents in court and with blocks, but the first appeals ruling sided with the customer who sent the agent."
   - "Blocking won't hold: customers, industry standards and the law are all moving toward agents."

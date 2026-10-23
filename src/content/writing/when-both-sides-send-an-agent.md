@@ -4,6 +4,9 @@ description: On OLX and Facebook Marketplace every listing is a small negotiatio
 date: 2026-10-23T20:00:00+05:30
 kind: essay
 tags: [agents, marketplaces, product]
+topic: "Agentic commerce"
+cover: negotiation
+featured: true
 summary:
   - "On second-hand marketplaces the real cost isn't the checkout, it's the conversation: dozens of messages per sale, most going nowhere."
   - "Agents on both sides can negotiate with each other, each holding one number its owner would never say out loud: the seller's floor and the buyer's ceiling."

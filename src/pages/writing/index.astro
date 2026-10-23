@@ -1,13 +1,96 @@
 ---
 import Base from '../../layouts/Base.astro';
-import PostList from '../../components/PostList.astro';
-import { getWriting } from '../../lib';
+import Cover from '../../components/Cover.astro';
+import { getWriting, url, readingTime } from '../../lib';
+
 const posts = await getWriting();
+const featured = posts.find((p) => p.data.featured) ?? posts[0];
+// Topics in order of how many posts they have, so the biggest come first.
+const counts = new Map<string, number>();
+posts.forEach((p) => counts.set(p.data.topic, (counts.get(p.data.topic) ?? 0) + 1));
+const topics = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([t]) => t);
+const showSearch = posts.length > 8;
+const slug = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 ---
-<Base title="Writing" description="Essays, case studies and guides on building AI products.">
-  <h1>Writing</h1>
-  <p class="lede">Essays, case studies and guides on building AI products — what worked, what didn't, and why.</p>
-  {posts.length > 0
-    ? <PostList posts={posts} />
-    : <p class="muted">The first piece, on evals, is on its way.</p>}
+<Base title="Writing" description="Essays on building AI products, agents and the tech landscape." wide>
+  <section class="writing-page">
+    <header class="writing-head">
+      <h1>Writing</h1>
+      <span class="count" data-count>{posts.length} {posts.length === 1 ? 'essay' : 'essays'}</span>
+    </header>
+
+    {posts.length === 0 && <p class="muted">The first piece is on its way.</p>}
+
+    {featured && (
+      <a class="feature-card" href={url(`writing/${featured.id}`)} data-feature>
+        <div class="cover"><Cover variant={featured.data.cover} seed={featured.data.title} /></div>
+        <div class="fc-body">
+          <span class="cp-topic">{featured.id === posts[0].id ? 'Latest' : 'Featured'} · {featured.data.topic}</span>
+          <h2>{featured.data.title}</h2>
+          <p>{featured.data.description}</p>
+          <span class="cp-meta">{readingTime(featured.body)} min read <span class="arrow">Read →</span></span>
+        </div>
+      </a>
+    )}
+
+    {posts.length > 1 && (
+      <div class="filters">
+        <div class="chips" role="group" aria-label="Filter by topic">
+          <button type="button" class="chip" data-topic="all" aria-pressed="true">All</button>
+          {topics.map((t) => <button type="button" class="chip" data-topic={slug(t)} aria-pressed="false">{t} <span>{counts.get(t)}</span></button>)}
+        </div>
+        {showSearch && <input class="search" type="search" placeholder="Search essays" aria-label="Search essays" data-search />}
+      </div>
+    )}
+
+    <ul class="post-grid">
+      {posts.map((p) => (
+        <li class:list={['post-card', { 'is-feature': p.id === featured?.id }]} data-topic={slug(p.data.topic)} data-text={`${p.data.title} ${p.data.description}`.toLowerCase()}>
+          <a href={url(`writing/${p.id}`)}>
+            <div class="cover"><Cover variant={p.data.cover} seed={p.data.title} /></div>
+            <div class="cp-body">
+              <span class="cp-topic">{p.data.topic}</span>
+              <h3>{p.data.title}</h3>
+              <p>{p.data.description}</p>
+              <span class="cp-meta">{readingTime(p.body)} min read</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="empty" data-empty hidden>No essays match that yet.</p>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const chips = [...document.querySelectorAll('.chip')];
+      const cards = [...document.querySelectorAll('.post-card')];
+      const feature = document.querySelector('[data-feature]');
+      const search = document.querySelector('[data-search]');
+      const empty = document.querySelector('[data-empty]');
+      const count = document.querySelector('[data-count]');
+      let topic = 'all';
+      const apply = () => {
+        const q = (search?.value || '').trim().toLowerCase();
+        const browsing = topic === 'all' && !q;
+        if (feature) feature.hidden = !browsing;
+        let shown = 0;
+        cards.forEach((c) => {
+          const ok = (topic === 'all' || c.dataset.topic === topic) && (!q || c.dataset.text.includes(q));
+          // While browsing everything, the featured post is already the big card above.
+          c.hidden = !ok || (browsing && c.classList.contains('is-feature'));
+          if (ok) shown++;
+        });
+        if (empty) empty.hidden = shown > 0;
+        if (count) count.textContent = `${shown} ${shown === 1 ? 'essay' : 'essays'}`;
+      };
+      chips.forEach((b) => b.addEventListener('click', () => {
+        topic = b.dataset.topic;
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+        apply();
+      }));
+      search?.addEventListener('input', apply);
+      apply();
+    })();
+  </script>
 </Base>

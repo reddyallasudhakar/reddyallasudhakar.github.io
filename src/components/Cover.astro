@@ -1,0 +1,74 @@
+---
+// Cover art for posts, drawn in SVG so it follows the site's light and dark themes.
+// Add a new motif by adding a case below and setting `cover: <name>` in a post's frontmatter.
+// Posts without a known cover get a pattern generated from their title.
+interface Props { variant?: string; seed: string }
+const { variant, seed } = Astro.props;
+
+let h = 0;
+for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+const rand = (n: number) => { h = (h * 1103515245 + 12345) >>> 0; return h % n; };
+
+const cols = [0, 1, 2, 3, 4, 5];
+const rows = [0, 1, 2];
+const fail = { r: 1, c: 3 };
+const trail = [0, 1, 2, 3, 4, 5];
+const arcs = Array.from({ length: 6 }, (_, i) => 30 + i * 34);
+const corner = rand(4);
+const accentArc = 1 + rand(4);
+const cx = corner % 2 === 0 ? 40 : 360, cy = corner < 2 ? 40 : 200;
+---
+<svg class="cover-art" viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <rect width="400" height="240" class="c-bg" />
+
+  {variant === 'evals' && (
+    <g>
+      {rows.map((r) => cols.map((c) => {
+        const x = 45 + c * 54, y = 46 + r * 54, bad = r === fail.r && c === fail.c;
+        return (
+          <g>
+            <rect x={x} y={y} width="40" height="40" rx="9" class={bad ? 'c-accent' : 'c-soft'} />
+            {bad
+              ? <path d={`M${x + 13} ${y + 13}L${x + 27} ${y + 27}M${x + 27} ${y + 13}L${x + 13} ${y + 27}`} class="c-on-accent" />
+              : <path d={`M${x + 11} ${y + 21}l6 6 12-13`} class="c-check" />}
+          </g>
+        );
+      }))}
+    </g>
+  )}
+
+  {variant === 'door' && (
+    <g>
+      <line x1="30" x2="370" y1="200" y2="200" class="c-line" />
+      <path d="M220 200V96a44 44 0 0 1 88 0V200Z" class="c-soft" />
+      <path d="M220 200V96a44 44 0 0 1 88 0V200" class="c-frame" />
+      <path d="M232 200V100a32 32 0 0 1 64 0V200Z" class="c-glow" />
+      {trail.map((i) => <circle cx={50 + i * 28} cy={186 - (i % 2) * 6} r="6" class="c-ink" opacity={0.2 + i * 0.1} />)}
+      <circle cx="264" cy="184" r="9" class="c-accent" />
+    </g>
+  )}
+
+  {variant === 'negotiation' && (
+    <g>
+      <path d="M40 42h150a16 16 0 0 1 16 16v26a16 16 0 0 1-16 16H70l-16 14v-14h-14a16 16 0 0 1-16-16V58a16 16 0 0 1 16-16Z" class="c-soft" />
+      <rect x="44" y="60" width="96" height="8" rx="4" class="c-ink" opacity="0.45" />
+      <rect x="44" y="76" width="60" height="8" rx="4" class="c-ink" opacity="0.25" />
+      <path d="M360 82H212a16 16 0 0 0-16 16v26a16 16 0 0 0 16 16h118l16 14v-14h14a16 16 0 0 0 16-16V98a16 16 0 0 0-16-16Z" class="c-soft" />
+      <rect x="216" y="100" width="110" height="8" rx="4" class="c-ink" opacity="0.45" />
+      <rect x="216" y="116" width="70" height="8" rx="4" class="c-ink" opacity="0.25" />
+      <rect x="168" y="178" width="110" height="34" rx="6" class="c-soft" />
+      <line x1="40" x2="360" y1="195" y2="195" class="c-line" />
+      <line x1="168" x2="168" y1="172" y2="218" class="c-dash" />
+      <line x1="278" x2="278" y1="172" y2="218" class="c-dash" />
+      <circle cx="84" cy="195" r="6" class="c-ink" opacity="0.35" />
+      <circle cx="322" cy="195" r="6" class="c-ink" opacity="0.35" />
+      <circle cx="223" cy="195" r="9" class="c-accent" />
+    </g>
+  )}
+
+  {!['evals', 'door', 'negotiation'].includes(variant ?? '') && (
+    <g fill="none">
+      {arcs.map((r, i) => <circle cx={cx} cy={cy} r={r} class={i === accentArc ? 'c-arc-accent' : 'c-arc'} />)}
+    </g>
+  )}
+</svg>

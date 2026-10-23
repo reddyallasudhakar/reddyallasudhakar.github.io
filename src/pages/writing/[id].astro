@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { render } from 'astro:content';
-import { getWriting, url, kindLabel } from '../../lib';
+import { getWriting, url, kindLabel, readingTime } from '../../lib';
 import { site } from '../../site';
 
 export async function getStaticPaths() {
@@ -14,8 +14,7 @@ export async function getStaticPaths() {
 }
 const { post, newer, older } = Astro.props;
 const { Content, headings } = await render(post);
-const words = (post.body ?? '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
-const minutes = Math.max(1, Math.round(words / 230));
+const minutes = readingTime(post.body);
 const summary = post.data.summary ?? [];
 const toc = headings.filter((h) => h.depth === 2 && h.text !== 'Sources');
 const jsonLd = {
