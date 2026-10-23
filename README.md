@@ -21,3 +21,14 @@ npm run dev        # http://localhost:4321
 ## Deploy
 
 Every push to `main` builds and deploys to GitHub Pages (`.github/workflows/deploy.yml`).
+
+## Share a post (Medium, Substack, LinkedIn, X)
+
+```bash
+npm run syndicate                    # newest post
+npm run syndicate -- agents-front-door
+```
+
+Writes `distribution/<post>/` (not committed): `README.txt` with the steps, `substack.html` with a
+Copy button, `linkedin.txt` and `x-thread.txt`. Medium uses its Import tool with the post URL, which
+keeps this site as the original for search.
