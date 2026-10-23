@@ -84,13 +84,20 @@ const jsonLd = {
       };
       addEventListener('scroll', onScroll, { passive: true });
       onScroll();
+      // Bold text mid-sentence is a key line: highlight it. Bold at the start of a paragraph is a label: leave it.
+      document.querySelectorAll('.post-layout .prose p strong, .post-layout .prose blockquote strong').forEach((b) => {
+        const before = b.previousSibling;
+        const atStart = !before || (before.nodeType === 3 && !before.textContent.trim() && !before.previousSibling);
+        if (!atStart && !b.closest('.mock, .key-points, blockquote')) b.classList.add('key');
+      });
       document.querySelectorAll('.toc-mobile a').forEach((a) => a.addEventListener('click', () => { a.closest('details').open = false; }));
       if (!links.length) return;
       const byId = new Map(links.map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
       const heads = [...byId.keys()].map((id) => document.getElementById(id)).filter(Boolean);
       const setActive = () => {
         let current = heads[0];
-        for (const h of heads) if (h.getBoundingClientRect().top < 140) current = h;
+        const line = Math.max(160, innerHeight * 0.3);
+        for (const h of heads) if (h.getBoundingClientRect().top < line) current = h;
         links.forEach((a) => a.removeAttribute('aria-current'));
         if (current) byId.get(current.id)?.setAttribute('aria-current', 'true');
       };
