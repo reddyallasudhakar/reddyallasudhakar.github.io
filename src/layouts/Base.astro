@@ -4,8 +4,8 @@ import Icon from '../components/Icon.astro';
 import { site, socials } from '../site';
 import { url } from '../lib';
 
-interface Props { title?: string; description?: string }
-const { title, description = site.description } = Astro.props;
+interface Props { title?: string; description?: string; wide?: boolean; type?: 'website' | 'article' }
+const { title, description = site.description, wide = false, type = 'website' } = Astro.props;
 const pageTitle = title ? `${title} · ${site.name}` : site.title;
 const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
 const nav = [
@@ -27,9 +27,11 @@ const themes = [
     <meta name="description" content={description} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
+    <meta name="twitter:card" content="summary" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <link rel="sitemap" href={url('sitemap.xml')} />
     <link rel="alternate" type="application/rss+xml" title={site.name} href={url('rss.xml')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -68,7 +70,7 @@ const themes = [
         </div>
       </div>
     </header>
-    <main class="page">
+    <main class:list={['page', { 'page--wide': wide }]}>
       <slot />
     </main>
     <footer class="site-footer">

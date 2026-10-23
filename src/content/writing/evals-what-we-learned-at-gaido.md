@@ -4,6 +4,11 @@ description: How evals built from our agents' real mistakes cut review from 40 m
 date: 2026-10-23
 kind: essay
 tags: [evals, agents, product]
+summary:
+  - "Our AI agents wrote insurance-claim reports, and a person read every one: about 40 minutes a case."
+  - "We turned every reviewer correction into a check (nine in all) and sent only failing reports to a human. Review fell to about 4 minutes."
+  - "Then an honest audit showed most checks graded the report against itself, not against the truth."
+  - "The lesson: a few real answers labelled from the source documents beat a wall of green checks. Evals are the product spec."
 ---
 
 ## One wrong number

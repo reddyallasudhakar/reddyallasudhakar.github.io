@@ -2,24 +2,101 @@
 import Base from '../../layouts/Base.astro';
 import { render } from 'astro:content';
 import { getWriting, url, kindLabel } from '../../lib';
+import { site } from '../../site';
 
 export async function getStaticPaths() {
   const posts = await getWriting();
-  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+  return posts.map((post, i) => ({
+    params: { id: post.id },
+    // getWriting() is newest first: "newer" is the one before, "older" the one after.
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
 }
-const { post } = Astro.props;
+const { post, newer, older } = Astro.props;
 const { Content, headings } = await render(post);
-const minutes = Math.max(1, Math.round((post.body ?? '').split(/\s+/).length / 230));
+const words = (post.body ?? '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 230));
+const summary = post.data.summary ?? [];
+const toc = headings.filter((h) => h.depth === 2 && h.text !== 'Sources');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  author: { '@type': 'Person', name: site.name, url: new URL(url(), Astro.site).href },
+};
 ---
-<Base title={post.data.title} description={post.data.description}>
-  <article class="prose">
-    <header>
-      <h1>{post.data.title}</h1>
-      <p class="meta">
-        {`${kindLabel[post.data.kind]} · ${minutes} min read`}
-      </p>
-    </header>
-    <Content />
-  </article>
-  <a class="btn back" href={url('writing')}>← All writing</a>
+<Base title={post.data.title} description={post.data.description} wide type="article">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <div class="read-progress" aria-hidden="true"><span></span></div>
+
+  <div class="post-layout">
+    {toc.length > 2 && (
+      <aside class="toc" aria-label="On this page">
+        <span class="toc-label">On this page</span>
+        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+      </aside>
+    )}
+
+    <article class="prose" id="top">
+      <header>
+        <h1>{post.data.title}</h1>
+        <p class="meta">{`${kindLabel[post.data.kind]} · ${minutes} min read`}</p>
+      </header>
+
+      {summary.length > 0 && (
+        <section class="key-points" aria-label="Key points">
+          <span class="kp-label">Key points</span>
+          <ul>{summary.map((s) => <li>{s}</li>)}</ul>
+        </section>
+      )}
+
+      {toc.length > 2 && (
+        <details class="toc-mobile">
+          <summary>On this page <span>{toc.length} sections</span></summary>
+          <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        </details>
+      )}
+
+      <Content />
+
+      <footer class="post-end">
+        <a href="#top" class="to-top">↑ Back to top</a>
+        <nav class="post-nav" aria-label="More writing">
+          {older ? <a href={url(`writing/${older.id}`)} class="pn prev"><small>Previous</small><span>{older.data.title}</span></a> : <span />}
+          {newer ? <a href={url(`writing/${newer.id}`)} class="pn next"><small>Next</small><span>{newer.data.title}</span></a> : <span />}
+        </nav>
+        <a class="btn back" href={url('writing')}>← All writing</a>
+      </footer>
+    </article>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const bar = document.querySelector('.read-progress span');
+      const article = document.querySelector('.post-layout .prose');
+      const links = [...document.querySelectorAll('.toc a')];
+      const onScroll = () => {
+        const r = article.getBoundingClientRect();
+        const total = r.height - innerHeight;
+        const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+        if (bar) bar.style.transform = `scaleX(${p})`;
+      };
+      addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      document.querySelectorAll('.toc-mobile a').forEach((a) => a.addEventListener('click', () => { a.closest('details').open = false; }));
+      if (!links.length) return;
+      const byId = new Map(links.map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
+      const heads = [...byId.keys()].map((id) => document.getElementById(id)).filter(Boolean);
+      const setActive = () => {
+        let current = heads[0];
+        for (const h of heads) if (h.getBoundingClientRect().top < 140) current = h;
+        links.forEach((a) => a.removeAttribute('aria-current'));
+        if (current) byId.get(current.id)?.setAttribute('aria-current', 'true');
+      };
+      addEventListener('scroll', setActive, { passive: true });
+      setActive();
+    })();
+  </script>
 </Base>

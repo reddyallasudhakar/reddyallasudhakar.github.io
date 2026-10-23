@@ -11,6 +11,8 @@ const writing = defineCollection({
     kind: z.enum(['essay', 'case-study', 'guide']).default('essay'),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    // 3–4 bullets shown in a "Key points" box at the top of the post.
+    summary: z.array(z.string()).default([]),
   }),
 });
 
