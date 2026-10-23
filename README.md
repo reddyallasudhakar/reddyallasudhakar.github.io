@@ -1,0 +1,23 @@
+# reddyallasudhakar.github.io
+
+My personal site: writing on building AI products, what I'm building, and what I'm reading.
+Built with [Astro](https://astro.build) and plain CSS. No tracking.
+
+```
+src/site.ts                 name, email and social links
+src/reading.ts              the Reading list on the home page
+src/content/writing/*.md    essays (add `draft: true` to hide one)
+src/content/projects/*.md   the Building list (`featured: true` shows it on the home page)
+src/pages/                  home, about, writing, RSS, 404
+```
+
+## Run locally
+
+```bash
+npm install
+npm run dev        # http://localhost:4321
+```
+
+## Deploy
+
+Every push to `main` builds and deploys to GitHub Pages (`.github/workflows/deploy.yml`).

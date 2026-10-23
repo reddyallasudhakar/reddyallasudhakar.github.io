@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site';
+import { reading } from '../reading';
+import { url, getWriting, getProjects } from '../lib';
+
+const posts = await getWriting();
+const building = (await getProjects()).filter((p) => p.data.featured);
+---
+<Base>
+  <section class="home">
+    <span class="eyebrow">AI product manager · {site.location}</span>
+    <h1>I find the problem worth solving, ship the agent that solves it, and build the evals that prove it works.</h1>
+    <p class="lede">
+      Hi, I'm {site.shortName}. I build AI products and write down what I learn, mostly from
+      getting things wrong first.
+    </p>
+    <p class="muted">Previously co-founder of Gaido AI. <a href={url('about')}>More about me</a></p>
+  </section>
+
+  {posts.length > 0 && (
+    <section>
+      <div class="section-label"><span>Writing</span></div>
+      <ul class="home-posts">
+        {posts.map((p) => (
+          <li>
+            <a href={url(`writing/${p.id}`)}>
+              <span class="t">{p.data.title}</span>
+              <span class="d">{p.data.description}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {building.length > 0 && (
+    <section>
+      <div class="section-label"><span>Building</span></div>
+      <ul class="rows">
+        {building.map((p) => (
+          <li>
+            <div class="row-main">
+              <span class="row-title">{p.data.title}</span>
+              <span class="row-note">{p.data.short ?? p.data.tagline}</span>
+            </div>
+            <span class="row-meta">{p.data.status}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {reading.length > 0 && (
+    <section>
+      <div class="section-label"><span>Reading</span></div>
+      <ul class="rows">
+        {reading.map((r) => (
+          <li>
+            <div class="row-main">
+              <a class="row-title" href={r.url} target="_blank" rel="noopener">{r.title}</a>
+              <span class="row-note">{r.takeaway}</span>
+            </div>
+            <span class="row-meta">{r.by} · {r.year}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</Base>

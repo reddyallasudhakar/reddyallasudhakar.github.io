@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import { render } from 'astro:content';
+import { getWriting, url, kindLabel } from '../../lib';
+
+export async function getStaticPaths() {
+  const posts = await getWriting();
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const minutes = Math.max(1, Math.round((post.body ?? '').split(/\s+/).length / 230));
+---
+<Base title={post.data.title} description={post.data.description}>
+  <article class="prose">
+    <header>
+      <h1>{post.data.title}</h1>
+      <p class="meta">
+        {`${kindLabel[post.data.kind]} · ${minutes} min read`}
+      </p>
+    </header>
+    <Content />
+  </article>
+  <a class="btn back" href={url('writing')}>← All writing</a>
+</Base>

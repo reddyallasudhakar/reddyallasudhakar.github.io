@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site, socials } from '../site';
+import { url } from '../lib';
+---
+<Base title="About" description={`About ${site.name}: AI product manager and builder.`}>
+  <h1>About</h1>
+  <p class="lede">
+    I've moved between most layers of a product: writing the code, making the strategy case,
+    running the product, and starting the company.
+  </p>
+  <p>
+    I started as an engineer at Bosch, went to BCG after an MBA, and then spent over four years at
+    Prudential, first setting up a new insurer in India and later leading product on its wellness app.
+  </p>
+  <p>
+    In 2025 I co-founded Gaido AI to fix something I'd seen up close: people in India lose
+    health-insurance claims they should win, because the process is built to wear them down.
+    We built AI agents that read the policy and the paperwork, write the appeal, and follow up
+    until the money comes back. A regulatory change pulled our funding, and we wound down in
+    September 2026. <a href={url('writing/evals-what-we-learned-at-gaido')}>I wrote about what it taught me.</a>
+  </p>
+  <p>
+    What I care about: picking the problem with the sharpest pain, putting something real in front
+    of users fast, and treating evals as the spec for anything an AI does. I still build most days.
+  </p>
+
+  <div class="section-label"><span>Get in touch</span></div>
+  <p>
+    I'm looking for AI product roles where I can own a product end to end. The best way to reach me
+    is <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+  <div class="actions">
+    <a class="btn primary" href={`mailto:${site.email}`}><Icon name="email" /> Email me</a>
+    {socials.filter((s) => s.icon !== 'email').map((s) => (
+      <a class="btn" href={s.url} rel="me noopener" target="_blank"><Icon name={s.icon} /> {s.label}</a>
+    ))}
+  </div>
+</Base>
